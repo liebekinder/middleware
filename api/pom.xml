@@ -32,6 +32,12 @@
       <!--<scope>provided</scope>-->
     <!--</dependency>-->
 
+    <!--<dependency>-->
+      <!--<groupId>org.hibernate</groupId>-->
+      <!--<artifactId>hibernate-core</artifactId>-->
+      <!--<version>4.2.7.SP1</version>-->
+    <!--</dependency>-->
+
   </dependencies>
 
   <build>
