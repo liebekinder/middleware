@@ -54,60 +54,60 @@ public interface EJBComponent {
 	 * 
 	 * @param token
 	 *            the identification token
-	 * @param rssUrl
-	 *            the RSS URL
+	 * @param rss
+	 *            the RSS
 	 * @return true if added successfully, false if RSS already exists or token
 	 *         invalid;
 	 */
-	public boolean addRSS(String token, String rssUrl);
+	public IFluxRSS addRSS(String token, IFluxRSS rss);
 
 	/**
 	 * delete RSS from database.
 	 * 
 	 * @param token
 	 *            the identification token
-	 * @param rssUrl
-	 *            the RSS URL
+	 * @param rss
+	 *            the RSS
 	 * @return true if the deletion ended successfully, false if RSS doesn't
 	 *         exist or token invalid.
 	 */
-	public boolean delRSS(String token, String rssUrl);
+	public boolean delRSS(String token, IFluxRSS rss);
 
 	/**
 	 * Get RSS information as title, author, description.
 	 * 
 	 * @param token
 	 *            the identification token
-	 * @param rssUrl
-	 *            the RSS URL
+	 * @param rss
+	 *            the RSS
 	 * @return the information or null if the RSS doesn't exist or invalid
 	 *         token.
 	 */
-	public String getRssInformation(String token, String rssUrl);
+	public IFluxRSS getFluxRSS(String token, IFluxRSS rss);
 
 	/**
 	 * Get RSS unread articles. These article are marked as read.
 	 * 
 	 * @param token
 	 *            the identification token
-	 * @param rssUrl
-	 *            the RSS URL
+	 * @param rss
+	 *            the RSS
 	 * @return the unread article list or null if RSS doesn't exist or token invalid.
 	 */
-	public List<String> getNewArticles(String token, String rssUrl);
+	public List<IArticle> getNewArticles(String token, IFluxRSS rss);
 
 	/**
 	 * Get X latest RSS articles. These article are marked as read if not already.
 	 * 
 	 * @param token
 	 *            the identification token
-	 * @param rssUrl
-	 *            the RSS URL
+	 * @param rss
+	 *            the RSS
 	 * @param nbArticles
 	 * 			  The number of articles started from the latest
 	 * @return the nbArticles latest article list or null if RSS doesn't exist or token invalid.
 	 */
-	public List<String> getLastArticles(String token, String rssUrl, int nbArticles);
+	public List<IArticle> getLastArticles(String token, IFluxRSS rss, int nbArticles);
 	
 	/**
 	 * Allow to tag a RSS with a category. The category is created if it doesn't
@@ -115,13 +115,13 @@ public interface EJBComponent {
 	 * 
 	 * @param token
 	 *            the identification token
-	 * @param rssUrl
-	 *            the RSS URL
+	 * @param rss
+	 *            the RSS
 	 * @param catName
 	 *            the category name
 	 * @return true if tagged, false if RSS doesn't exist or invalid token.
 	 */
-	public boolean tagRss(String token, String rssUrl, String catName);
+	public boolean tagRss(String token, IFluxRSS rss, String catName);
 
 	/**
 	 * Get RSS by category.
@@ -129,18 +129,7 @@ public interface EJBComponent {
 	 *            the identification token
 	 * @param catName
 	 *            the category name
-	 * @return a list of RSS URL.
+	 * @return a list of RSS.
 	 */
-	public List<String> getRSS(String token, String catName);	
-
-//	/**
-//	 * Update RSS in database, by reading remote content and storing new
-//	 * content.
-//	 * 
-//	 * @param token
-//	 *            the identification token
-//	 * @return true if gather successfully ended, false if ended with error or
-//	 *         token invalid.
-//	 */
-//	public boolean gatherRss(String token);
+	public List<IFluxRSS> getRSS(String token, String catName);	
 }
