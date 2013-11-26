@@ -31,6 +31,13 @@
       <!--&lt;!&ndash;<version>2.0.0-rc1</version>&ndash;&gt;-->
     <!--</dependency>-->
 
+    <!--<dependency>-->
+      <!--<groupId>com.h2database</groupId>-->
+      <!--<artifactId>h2</artifactId>-->
+      <!--<version>1.3.174</version>-->
+      <!--<scope>runtime</scope>-->
+    <!--</dependency>-->
+
   </dependencies>
 
   <build>
