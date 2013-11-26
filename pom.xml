@@ -27,6 +27,15 @@
   <dependencies>
   </dependencies>
 
+  <repositories>
+
+    <repository>
+      <id>devjavanet</id>
+      <url>http://download.java.net/maven2/</url>
+    </repository>
+
+  </repositories>
+
   <build>
     <resources />
     <plugins />
