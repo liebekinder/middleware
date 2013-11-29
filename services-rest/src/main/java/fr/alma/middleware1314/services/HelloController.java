@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("sample")
-public class HellController {
+public class HelloController {
 
     @RequestMapping(value="sayHello", method = RequestMethod.POST)
     @ResponseBody
-    public String sayHello(@RequestParam(value = "name") String name) {
-        return "Hello " + name;
+    public Country sayHello(@RequestParam(value = "name") String name) {
+        Country country = new Country();
+        country.setName("Hello " + name);
+        country.setId(42L);
+        return country;
     }
 
 }

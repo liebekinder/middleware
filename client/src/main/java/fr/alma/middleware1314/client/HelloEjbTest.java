@@ -10,7 +10,7 @@ import fr.alma.middleware1314.services.sample.HelloRemote;
 /**
  * @author Arnaud Thimel : thimel@codelutin.com
  */
-public class HelloTest {
+public class HelloEjbTest {
 
     public static void main(String[] args) throws Exception {
         final Hashtable jndiProperties = new Hashtable();
