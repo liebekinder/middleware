@@ -11,7 +11,7 @@ import fr.alma.middleware1314.api.User;
 
 @Entity
 @Table(name = "USERS")
-public class UserBean implements Serializable, User {
+public class UserBean implements Serializable {
 
 	/**
 	 * 

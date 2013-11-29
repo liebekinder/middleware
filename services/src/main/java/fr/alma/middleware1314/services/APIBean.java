@@ -21,13 +21,14 @@ public class APIBean implements API {
 	@Override
 	public boolean registerUser(String mail, String mdp) {
 		// already existing user?
-		Query q = em.createQuery("from User where user.mail= :mail");
+		Query q = em.createQuery("from UserBean u where u.mail= :mail");
 		q.setParameter("mail", mail);
 		List<?> users = q.getResultList();
 		if (users.size() == 0) {
 			//user doesn't exist
 			if(mdp != null && !mdp.isEmpty()){
-				User newUser = new UserBean(mail, mdp);
+				UserBean newUser = new UserBean(mail, mdp);
+				em.persist(newUser);
 			}
 		} else {
 			return false;
