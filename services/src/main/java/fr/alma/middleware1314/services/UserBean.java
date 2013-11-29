@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import fr.alma.middleware1314.api.User;
 
 @Entity
-@Table(name = "USERS")
 public class UserBean implements Serializable {
 
 	/**
@@ -25,6 +24,12 @@ public class UserBean implements Serializable {
 		this.mail = mail;
 		this.mdp = mdp;
 	}
+
+	public UserBean() {
+		super();
+	}
+
+
 
 	@Id
 	public String getMail() {
