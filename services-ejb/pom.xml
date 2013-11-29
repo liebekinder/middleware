@@ -8,10 +8,10 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>reader-services</artifactId>
+  <artifactId>reader-services-ejb</artifactId>
   <packaging>jar</packaging>
 
-  <name>Reader :: Services</name>
+  <name>Reader :: Services :: EJB</name>
 
   <properties>
   </properties>
