@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import fr.alma.middleware1314.services.sample.Country;
 import fr.alma.middleware1314.services.sample.HelloRemote;
 
 /**
@@ -13,12 +14,12 @@ import fr.alma.middleware1314.services.sample.HelloRemote;
 public class HelloEjbTest {
 
     public static void main(String[] args) throws Exception {
-        final Hashtable jndiProperties = new Hashtable();
+        Hashtable jndiProperties = new Hashtable();
         jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-        final Context context = new InitialContext(jndiProperties);
-// Nom de la classe d'implémentation + /local ou /remote
+        Context context = new InitialContext(jndiProperties);
+
         HelloRemote helloService = (HelloRemote) context.lookup("ejb:/reader-services-ejb-0.1-SNAPSHOT/HelloBean!fr.alma.middleware1314.services.sample.HelloRemote");
-        String result = helloService.sayHello("Arno");
+        Country result = helloService.sayHello("France");
         System.out.println(result);
     }
 
