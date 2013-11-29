@@ -18,6 +18,8 @@
   <modules>
     <module>api</module>
     <module>services</module>
+    <module>services-ejb</module>
+    <module>client</module>
   </modules>
 
   <properties>
