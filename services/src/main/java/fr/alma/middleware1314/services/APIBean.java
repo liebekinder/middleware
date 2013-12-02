@@ -38,13 +38,23 @@ public class APIBean implements API {
 
 	@Override
 	public String login(String mail, String mdp) {
-		// TODO Auto-generated method stub
-		return null;
+		Query q = em.createQuery("from UserBean u where u.mail= :mail");
+		q.setParameter("mail", mail);
+		List<?> users = q.getResultList();
+		
+		if(users.size()==0) return "ERR,0, user doesn't exist";
+		
+		//In theory we got 1 user
+		UserBean user = (UserBean) users.get(0);
+		if(user.getMdp().equals(mdp)) return "ERR,1,Wrong password";
+		
+		return Tokens.requestNewToken(user);
 	}
 
 	@Override
 	public FluxRSS addRSS(String token, FluxRSS rss) {
-		// TODO Auto-generated method stub
+		UserBean user = Tokens.getUserFromToken(token);
+//		if(user!=null) user.addArticle(new Article());
 		return null;
 	}
 
