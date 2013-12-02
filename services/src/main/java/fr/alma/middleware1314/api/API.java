@@ -59,7 +59,7 @@ public interface API {
 	 * @return true if added successfully, false if RSS already exists or token
 	 *         invalid;
 	 */
-	public FluxRSS addRSS(String token, FluxRSS rss);
+	public FluxRSS addRSS(String token, String rss);
 
 	/**
 	 * delete RSS from database.
@@ -71,7 +71,7 @@ public interface API {
 	 * @return true if the deletion ended successfully, false if RSS doesn't
 	 *         exist or token invalid.
 	 */
-	public boolean delRSS(String token, FluxRSS rss);
+	public boolean delRSS(String token, String rss);
 
 	/**
 	 * Get RSS information as title, author, description.

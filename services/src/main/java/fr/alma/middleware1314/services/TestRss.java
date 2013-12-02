@@ -24,7 +24,8 @@ public class TestRss {
 		for (Iterator<?> i = feed.getEntries().iterator(); i.hasNext();) {
 			SyndEntry entry = (SyndEntry) i.next();
 			System.out.println(entry.getTitle());
-			System.out.println("---"+entry.getForeignMarkup().hashCode());
+			System.out.println("---"+entry.getUri());
+			System.out.println(entry.getContents().get(0).getClass());
 		}
 
 	}

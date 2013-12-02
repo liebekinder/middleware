@@ -39,7 +39,10 @@ public class Tokens {
 	}
 
 	public static UserBean getUserFromToken(String token) {
-		if(correlation.containsKey(token)) return correlation.get(token);
+		if(correlation.containsKey(token)) {
+			timeRemaining.put(token, new Date().getTime());
+			return correlation.get(token);
+		}
 		return null;
 	}
 

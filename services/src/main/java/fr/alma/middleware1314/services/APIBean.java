@@ -1,11 +1,22 @@
 package fr.alma.middleware1314.services;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.XmlReader;
 
 import fr.alma.middleware1314.api.API;
 import fr.alma.middleware1314.api.Article;
@@ -52,14 +63,82 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public FluxRSS addRSS(String token, FluxRSS rss) {
+	public FluxRSS addRSS(String token, String rssUrl) {
 		UserBean user = Tokens.getUserFromToken(token);
-//		if(user!=null) user.addArticle(new Article());
+		FluxRSSBean retour = new FluxRSSBean();
+		if(user!=null)
+		{
+			//requete sur les flux...
+			Query q = em.createQuery("from FluxRSSBean a where a.url= :url");
+			q.setParameter("url", rssUrl);
+			List<FluxRSSBean> fluxRssList = q.getResultList();
+			
+			
+			
+			if(fluxRssList.size()==0) {
+				//TODO register in user
+				//create
+			}
+			else {
+				//TODO register in user
+				//updtate existong articles ?
+				//méthode de maj et retour tout
+				return fluxRssList.get(0);
+			}
+			
+//			for(ArticleBean article : generateArticlesFromRssFeed(rss)) {
+//				Query q = em.createQuery("from ArticleBean a where a.id= :id");
+//				q.setParameter("id", article.getId());
+//				List<ArticleBean> articles = q.getResultList();
+//				
+//				//Max 1 article
+//				if(articles.size()==0) {
+//					em.persist(article);
+//					retour.
+//				}
+//				else {
+//					if(articles.get(0).getDate().getTime()<article.getDate().getTime()) em.persist(article);
+//				}
+//				
+//			}
+		}
+		
+		
+		
 		return null;
 	}
 
+	private List<ArticleBean> generateArticlesFromRssFeed(String rss) {
+		URL source;
+		try {
+			source = new URL(rss);
+		} catch (MalformedURLException e) {
+			return null;
+		}
+		
+		List<ArticleBean> returnList = new ArrayList<ArticleBean>();
+		
+		SyndFeedInput input = new SyndFeedInput();
+		SyndFeed feed;
+		try {
+			feed = input.build(new XmlReader(source));
+		} catch (Exception e) {
+			return null;
+		}
+
+//		System.out.println("Feed Title: " + feed.getAuthor());
+
+		for (Iterator<?> i = feed.getEntries().iterator(); i.hasNext();) {
+			SyndEntry entry = (SyndEntry) i.next();
+			returnList.add(new ArticleBean(entry));
+//			System.out.println(entry.getTitle());
+//			System.out.println("---"+entry.getForeignMarkup().hashCode());
+		}
+		return returnList;
+	}
+
 	@Override
-	public boolean delRSS(String token, FluxRSS rss) {
+	public boolean delRSS(String token, String rss) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -2,6 +2,7 @@ package fr.alma.middleware1314.services;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.sun.syndication.feed.synd.SyndEntry;
 
 import fr.alma.middleware1314.api.Article;
 
@@ -20,21 +23,33 @@ public class ArticleBean implements Serializable,Article {
 	 * 
 	 */
 	private static final long serialVersionUID = 2597415844214936502L;
-	private long id;
+	private String id;
 	private String nom;
 	private Date date;
-	private String contenu;
+	private List<?> contenu;
 	
 	public ArticleBean() {
 		super();
 	}
 
+
+	public ArticleBean(SyndEntry entry) {
+		super();
+		this.nom = entry.getTitle();
+		this.id = entry.getUri();
+		this.date = entry.getUpdatedDate();
+		this.contenu = entry.getContents();
+		
+		//TODO beaucoup à ajouter http://www.docjar.org/docs/api/com/sun/syndication/feed/synd/SyndEntry.html
+	}
+	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -55,10 +70,10 @@ public class ArticleBean implements Serializable,Article {
 	}
 
 	@Basic
-	public String getContenu() {
+	public List<?> getContenu() {
 		return contenu;
 	}
-	public void setContenu(String contenu) {
+	public void setContenu(List<?> contenu) {
 		this.contenu = contenu;
 	}
 	
