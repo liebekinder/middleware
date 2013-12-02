@@ -20,6 +20,7 @@ public class HelloEjbTest {
         API helloService = (API) context.lookup("ejb:/reader-services-0.1-SNAPSHOT/APIBean!fr.alma.middleware1314.api.API");
         boolean result = helloService.registerUser("afza", "fe");
         //HelloRemote helloService = (HelloRemote) context.lookup("ejb:/reader-services-ejb-0.1-SNAPSHOT/HelloBean!fr.alma.middleware1314.services.sample.HelloRemote");
+        
         System.out.println(result);
     }
 
