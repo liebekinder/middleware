@@ -135,7 +135,23 @@ public class APIBean implements API {
 
 	@Override
 	public boolean delRSS(String token, String rss) {
-		// TODO Auto-generated method stub
+		UserBean user = Tokens.getUserFromToken(token);
+		if(user!=null) {
+			List<FluxRSS> listeFlux = user.getFlux();
+			
+			FluxRSS toDelete = null;
+			for(FluxRSS fRss : listeFlux) {
+				if(fRss.getUrl().equals(rss)) {
+					toDelete = fRss;
+					break;
+				}
+			}
+			if(toDelete==null) return false;
+			
+			listeFlux.remove(toDelete);
+			user.setFlux(listeFlux);
+			return true;
+		}
 		return false;
 	}
 
