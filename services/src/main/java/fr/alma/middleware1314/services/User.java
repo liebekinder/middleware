@@ -2,11 +2,13 @@ package fr.alma.middleware1314.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User implements Serializable {
@@ -14,15 +16,16 @@ public class User implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8690045689335999761L;
+	private static final long serialVersionUID = 317541137568949546L;
 	private String mail;
 	private String mdp;// IMPOSSIBLE IN PRODUCTION!!!
-	private ArrayList<FluxRSS> flux = new ArrayList<FluxRSS>();
+	private List<FluxRSS> flux;
 
 	public User(String mail, String mdp) {
 		super();
 		this.mail = mail;
 		this.mdp = mdp;
+		this.flux = new ArrayList<FluxRSS>();
 	}
 
 	public User() {
@@ -47,12 +50,12 @@ public class User implements Serializable {
 		this.mdp = mdp;
 	}
 
-	@Basic
-	public ArrayList<FluxRSS> getFlux() {
+	@ManyToMany
+	public List<FluxRSS> getFlux() {
 		return flux;
 	}
-	public void setFlux(ArrayList<FluxRSS> flux) {
-		this.flux = flux;
+	public void setFlux(List<FluxRSS> listeFlux) {
+		this.flux = listeFlux;
 	}
 	
 	

@@ -17,7 +17,7 @@ public class Article implements Serializable, Comparable<Article>{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2597415844214936502L;
+	private static final long serialVersionUID = -4918452921582492512L;
 	private String id;
 	private String nom;
 	private String author;
@@ -43,7 +43,6 @@ public class Article implements Serializable, Comparable<Article>{
 	
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	public String getId() {
 		return id;
 	}

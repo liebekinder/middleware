@@ -19,7 +19,7 @@ public class Reading implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 174642223984550851L;
+	private static final long serialVersionUID = 441817175990233893L;
 	private long id;
 	private User user;
 	private Article article;

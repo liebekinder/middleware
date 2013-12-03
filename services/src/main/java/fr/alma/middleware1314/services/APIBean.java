@@ -1,7 +1,13 @@
 package fr.alma.middleware1314.services;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,9 +21,11 @@ public class APIBean implements API {
 
 	@PersistenceContext
 	private EntityManager em;
+	
 
 	@Override
 	public boolean registerUser(String mail, String mdp) {
+//		em.refresh(user);
 		// already existing user?
 		Query q = em.createQuery("from User u where u.mail= :mail");
 		q.setParameter("mail", mail);
@@ -46,12 +54,12 @@ public class APIBean implements API {
 		User user = (User) users.get(0);
 		if(!user.getMdp().equals(mdp)) return "ERR,1,Wrong password "+user.getMail()+" "+user.getMdp();
 		
-		return Tokens.requestNewToken(user);
+		return this.requestNewToken(user);
 	}
 
 	@Override
-	public FluxRSSClient addRSS(String token, String rssUrl) {
-		User user = Tokens.getUserFromToken(token);
+	public FluxRSS addRSS(String token, String rssUrl) {
+		User user = this.getUserFromToken(token);
 		System.out.println(user.getMail());
 		FluxRSS retour = null;
 		if(user!=null)
@@ -74,15 +82,15 @@ public class APIBean implements API {
 
 			user.addFlux(retour);
 		}
-//		return retour;
-		return new FluxRSSClient(retour);
+		return retour;
+//		return new FluxRSSClient(retour);
 	}
 
 	@Override
 	public boolean delRSS(String token, String rss) {
-		User user = Tokens.getUserFromToken(token);
+		User user = this.getUserFromToken(token);
 		if(user!=null) {
-			ArrayList<FluxRSS> listeFlux = user.getFlux();
+			List<FluxRSS> listeFlux = user.getFlux();
 			
 			FluxRSS toDelete = null;
 			for(FluxRSS fRss : listeFlux) {
@@ -101,8 +109,8 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public List<ArticleClient> getNewArticles(String token, String rss) {
-		User user = Tokens.getUserFromToken(token);
+	public List<Article> getNewArticles(String token, String rss) {
+		User user = this.getUserFromToken(token);
 		if(user!=null) {
 			for(FluxRSS flux : user.getFlux()) {
 				if(flux.getUrl().equals(rss)) {
@@ -113,7 +121,7 @@ public class APIBean implements API {
 						Query q = em.createQuery("from Reading r where r.article= :article AND r.user = :user");				
 						q.setParameter("article", article);
 						q.setParameter("user", user);
-						ArrayList<Article> articles = (ArrayList<Article>) q.getResultList();
+						List<Article> articles = (ArrayList<Article>) q.getResultList();
 						if(articles.size()==0) {
 							//not read
 							articlesToReturn.add(article);
@@ -122,12 +130,12 @@ public class APIBean implements API {
 							em.persist(new Reading(user, article));
 						}
 					}
-					List<ArticleClient> ac = new ArrayList<ArticleClient>();
-					for(Article a: articlesToReturn){
-						ac.add(new ArticleClient(a));
-					}
-					return ac;
-//					return articlesToReturn;
+//					List<ArticleClient> ac = new ArrayList<ArticleClient>();
+//					for(Article a: articlesToReturn){
+//						ac.add(new ArticleClient(a));
+//					}
+//					return ac;
+					return articlesToReturn;
 				}
 			}
 		}
@@ -135,19 +143,82 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public List<FluxRSSClient> getRSS(String token, String catName) {
-		User user = Tokens.getUserFromToken(token);
+	public List<FluxRSS> getRSS(String token, String catName) {
+		User user = this.getUserFromToken(token);
 		if(user!=null) {
 			if(catName==null) {
-				List<FluxRSSClient> ac = new ArrayList<FluxRSSClient>();
-				for(FluxRSS a: user.getFlux()){
-					ac.add(new FluxRSSClient(a));
-				}
-				return ac;
-//				return user.getFlux();
+//				List<FluxRSSClient> ac = new ArrayList<FluxRSSClient>();
+//				for(FluxRSS a: user.getFlux()){
+//					ac.add(new FluxRSSClient(a));
+//				}
+//				return ac;
+				return user.getFlux();
 			}
 		}
 		return null;
 	}
+	
+	
+	
+	//TOken management
+	
+	/**
+	 * Timeout in seconds
+	 */
+	protected final int timeout = 10*60;
+	/**
+	 * Check time in seconds
+	 */
+	protected final int checkTime = 60;
+
+	protected Map<String,User> correlation = new HashMap<String,User>();
+	protected Map<String,Long> timeRemaining = new HashMap<String,Long>();
+	private TokenCleaner cleaner = new TokenCleaner();
+	
+	
+	public String requestNewToken(User user) {
+		if(correlation.size()==0) launchCleaner();
+		UUID uuid = UUID.randomUUID();
+		String token = uuid.toString();
+		correlation.put(token, user);
+		timeRemaining.put(token, new Date().getTime());
+		return token;
+	}
+
+	private void launchCleaner() {
+		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(cleaner, 0, timeout, TimeUnit.SECONDS);
+	}
+
+	public User getUserFromToken(String token) {
+		System.out.println(token);
+		for(String t:correlation.keySet()){
+			System.out.println(t);
+		}
+		if(correlation.containsKey(token)) {
+			timeRemaining.put(token, new Date().getTime());
+			User user = correlation.get(token);
+//			em.refresh(user);
+			return user;
+		}
+		return null;
+	}
+
+	private class TokenCleaner implements Runnable {
+
+		@Override
+		public void run() {
+			List<String> markedForRemove = new ArrayList<String>();
+			for(String token : timeRemaining.keySet()) {
+				if(timeRemaining.get(token)+timeout*1000>new Date().getTime()) markedForRemove.add(token);
+			}
+			for(String token : markedForRemove) {
+				timeRemaining.remove(token);
+				correlation.remove(token);
+			}
+		}
+		
+	}
+	
+	//end token management
 
 }

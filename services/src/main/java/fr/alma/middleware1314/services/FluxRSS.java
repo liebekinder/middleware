@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -26,9 +27,8 @@ public class FluxRSS implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1269542453504111716L;
-
-	private ArrayList<Article> articles = new ArrayList<Article>();
+	private static final long serialVersionUID = -2042645918228632429L;
+	private List<Article> articles = new ArrayList<Article>();
 	private String url;
 	private String author;
 	private String title;
@@ -113,13 +113,12 @@ public class FluxRSS implements Serializable {
 		}
 	}
 
-	@Basic
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<Article> getArticles() {
 		return articles;
 	}
 
-	public void setArticles(ArrayList<Article> articles) {
+	public void setArticles(List<Article> articles) {
 		this.articles = articles;
 	}
 
