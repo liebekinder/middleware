@@ -175,7 +175,12 @@ public class APIBean implements API {
 
 	@Override
 	public List<FluxRSS> getRSS(String token, String catName) {
-		// TODO Auto-generated method stub
+		User user = Tokens.getUserFromToken(token);
+		if(user!=null) {
+			if(catName==null) {
+				return user.getFlux();
+			}
+		}
 		return null;
 	}
 
