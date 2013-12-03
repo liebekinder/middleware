@@ -17,7 +17,7 @@ import fr.alma.middleware1314.api.Article;
 
 @Entity
 @Table(name = "ARTICLE")
-public class ArticleBean implements Serializable,Article {
+public class ArticleBean implements Serializable,Article, Comparable<ArticleBean>{
 
 	/**
 	 * 
@@ -76,6 +76,22 @@ public class ArticleBean implements Serializable,Article {
 	public void setContenu(List<?> contenu) {
 		this.contenu = contenu;
 	}
+
+	@Override
+	public int compareTo(ArticleBean a) {
+		if(this.date.compareTo(a.date) <0){
+			return -1;
+		}
+		if(this.date.compareTo(a.date) >0){
+			return 1;
+		}
+		return 0;
+	}
+	
+	public boolean equals(ArticleBean a){
+		return this.id.equals(a.id);
+	}
+	
 	
 	
 	

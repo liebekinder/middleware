@@ -62,7 +62,7 @@ public class APIBean implements API {
 	@Override
 	public FluxRSS addRSS(String token, String rssUrl) {
 		UserBean user = Tokens.getUserFromToken(token);
-		FluxRSSBean retour = new FluxRSSBean();
+		FluxRSSBean retour;
 		if(user!=null)
 		{
 			//requete sur les flux...
@@ -73,7 +73,7 @@ public class APIBean implements API {
 			if(fluxRssList.size()==0) {
 				//TODO register in user
 				//create
-				FluxRSS newFlux = new FluxRSSBean();
+				FluxRSS newFlux = new FluxRSSBean(rssUrl);
 			}
 			else {
 				//TODO register in user
