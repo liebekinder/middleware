@@ -25,6 +25,7 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 	private static final long serialVersionUID = 2597415844214936502L;
 	private String id;
 	private String nom;
+	private String author;
 	private Date date;
 	private List<?> contenu;
 	
@@ -39,6 +40,8 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 		this.id = entry.getUri();
 		this.date = entry.getUpdatedDate();
 		this.contenu = entry.getContents();
+		this.author = entry.getAuthor();
+		
 		
 		//TODO beaucoup à ajouter http://www.docjar.org/docs/api/com/sun/syndication/feed/synd/SyndEntry.html
 	}
@@ -76,6 +79,15 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 	public void setContenu(List<?> contenu) {
 		this.contenu = contenu;
 	}
+	
+	@Basic
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
 
 	@Override
 	public int compareTo(ArticleBean a) {
@@ -88,6 +100,8 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 		return 0;
 	}
 	
+
+
 	public boolean equals(ArticleBean a){
 		return this.id.equals(a.id);
 	}

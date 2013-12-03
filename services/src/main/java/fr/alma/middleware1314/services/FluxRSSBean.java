@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -52,33 +53,42 @@ public class FluxRSSBean implements Serializable, FluxRSS {
 			this.description = feed.getDescription();
 			this.publishDate = feed.getPublishedDate();
 			
+			MAJArticles();
+			
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FeedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private boolean MAJArticles() throws IllegalArgumentException, MalformedURLException, FeedException, IOException{
+	private void MAJArticles() throws IllegalArgumentException, MalformedURLException, FeedException, IOException{
 		SyndFeedInput input = new SyndFeedInput();
 		SyndFeed feed = input.build(new XmlReader(new URL(url)));
 		List<?> entries = feed.getEntries();
-		Iterator<SyndEntry> i = (Iterator<SyndEntry>) entries.iterator();
+		Iterator<?> i = entries.iterator();
 		while(i.hasNext()){
-			SyndEntry entry = i.next();
+			SyndEntry entry = (SyndEntry) i.next();
 			ArticleBean article = new ArticleBean(entry);
-			
-		}
-		return false;
-		
+			//nouvel article: je récupère les article de ce flux, je vérifie que ce nouveau existe ou non
+			//s'il existe, je regarde sa date et met à jour si besoin
+			//sinon, je l'ajoute
+			int courant = articles.indexOf(article);
+			if(courant>0){
+				if(article.compareTo((ArticleBean)articles.get(courant)) > 0){
+					//update
+					articles.set(courant, article);
+				}
+			}
+			else{
+				//add
+				articles.add(article);
+			}
+		}		
 	}
 
 
@@ -97,6 +107,40 @@ public class FluxRSSBean implements Serializable, FluxRSS {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	@Basic
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	@Basic
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@Basic
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Basic
+	public Date getPublishDate() {
+		return publishDate;
+	}
+	public void setPublishDate(Date publishDate) {
+		this.publishDate = publishDate;
+	}
+	
+	
 	
 	
 
