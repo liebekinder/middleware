@@ -28,7 +28,7 @@ public class FluxRSS implements Serializable {
 	 */
 	private static final long serialVersionUID = 1269542453504111716L;
 
-	private List<Article> articles = new ArrayList<Article>();
+	private ArrayList<Article> articles = new ArrayList<Article>();
 	private String url;
 	private String author;
 	private String title;
@@ -77,7 +77,7 @@ public class FluxRSS implements Serializable {
 		}
 	}
 
-	private void MAJArticles() {
+	public void MAJArticles() {
 		SyndFeedInput input = new SyndFeedInput();
 		SyndFeed feed;
 		try {
@@ -103,17 +103,13 @@ public class FluxRSS implements Serializable {
 				}
 			}
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("argument invalide");
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("url invalide");
 		} catch (FeedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("flux invalide");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("IO erreur");
 		}
 	}
 
@@ -123,7 +119,7 @@ public class FluxRSS implements Serializable {
 		return articles;
 	}
 
-	public void setArticles(List<Article> articles) {
+	public void setArticles(ArrayList<Article> articles) {
 		this.articles = articles;
 	}
 

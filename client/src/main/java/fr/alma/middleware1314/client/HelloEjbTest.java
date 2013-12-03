@@ -10,8 +10,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import fr.alma.middleware1314.api.API;
-import fr.alma.middleware1314.services.Article;
-import fr.alma.middleware1314.services.FluxRSS;
+import fr.alma.middleware1314.services.ArticleClient;
+import fr.alma.middleware1314.services.FluxRSSClient;
 
 /**
  * @author Arnaud Thimel : thimel@codelutin.com
@@ -35,7 +35,7 @@ public class HelloEjbTest {
         	System.out.println("(2) - login d'un utilisateur");
         	System.out.println("(3) - ajout d'un flux");
         	System.out.println("(4) - lecture flux non lus");
-        	System.out.println("(5) - vide");
+        	System.out.println("(5) - list flux");
         	System.out.println("(0) - quitter");
         	saisie = scan.nextInt();
         	
@@ -64,17 +64,20 @@ public class HelloEjbTest {
         //HelloRemote helloService = (HelloRemote) context.lookup("ejb:/reader-services-ejb-0.1-SNAPSHOT/HelloBean!fr.alma.middleware1314.services.sample.HelloRemote");
     }
 
-	private static List<FluxRSS> recupereFlux(API middleware) {
-		return null;
-		
-		
+	private static List<FluxRSSClient> recupereFlux(API middleware) {
+		if(token == null || token.isEmpty()) return null;		
+		List<FluxRSSClient> flux = middleware.getRSS(token, null);
+		for(FluxRSSClient f: flux){
+			System.out.println(f.getTitle());
+		}
+		return flux;
 	}
 
 	private static void readNoRead(API middleware) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Quel flux recupérer?");
-		List<FluxRSS> flux = recupereFlux(middleware);
-		for(FluxRSS f: flux){
+		List<FluxRSSClient> flux = recupereFlux(middleware);
+		for(FluxRSSClient f: flux){
 			System.out.println(f.getTitle());
 		}
 		int pass = scan.nextInt();
@@ -82,8 +85,8 @@ public class HelloEjbTest {
 		if(token == null || token.isEmpty()) return;
 		
 
-		List<Article> articles = (List<Article>) middleware.getNewArticles(token, flux.get(pass).getUrl());
-		for(Article a:articles){
+		List<ArticleClient> articles = (List<ArticleClient>) middleware.getNewArticles(token, flux.get(pass).getUrl());
+		for(ArticleClient a:articles){
 			System.out.println(a.getNom());
 		}
 	}
@@ -96,11 +99,11 @@ public class HelloEjbTest {
 			System.out.println(url);
 		}
 		int pass = scan.nextInt();
-		if(pass <0 || pass >1) return;
+		if(pass <0 || pass > fluxTemp.size()) return;
 		if(token == null || token.isEmpty()) return;
 		
 		
-		FluxRSS monFlux = middleware.addRSS(token, fluxTemp.get(pass));
+		FluxRSSClient monFlux = middleware.addRSS(token, fluxTemp.get(pass));
 		System.out.println(monFlux.getTitle());
 		
 	}

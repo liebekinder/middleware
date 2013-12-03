@@ -5,7 +5,9 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import fr.alma.middleware1314.services.Article;
+import fr.alma.middleware1314.services.ArticleClient;
 import fr.alma.middleware1314.services.FluxRSS;
+import fr.alma.middleware1314.services.FluxRSSClient;
 
 @Remote
 public interface API {
@@ -62,7 +64,7 @@ public interface API {
 	 * @return true if added successfully, false if RSS already exists or token
 	 *         invalid;
 	 */
-	public FluxRSS addRSS(String token, String rss);
+	public FluxRSSClient addRSS(String token, String rss);
 
 	/**
 	 * delete RSS from database.
@@ -97,7 +99,7 @@ public interface API {
 	 *            the RSS
 	 * @return the unread article list or null if RSS doesn't exist or token invalid.
 	 */
-	public List<Article> getNewArticles(String token, String rss);
+	public List<ArticleClient> getNewArticles(String token, String rss);
 
 	/**
 	 * Get X latest RSS articles. These article are marked as read if not already.
@@ -134,5 +136,5 @@ public interface API {
 	 *            the category name
 	 * @return a list of RSS. If catName is null, returns all FluxRSS
 	 */
-	public List<FluxRSS> getRSS(String token, String catName);	
+	public List<FluxRSSClient> getRSS(String token, String catName);	
 }

@@ -1,6 +1,5 @@
 package fr.alma.middleware1314.services;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public FluxRSS addRSS(String token, String rssUrl) {
+	public FluxRSSClient addRSS(String token, String rssUrl) {
 		User user = Tokens.getUserFromToken(token);
 		System.out.println(user.getMail());
 		FluxRSS retour = null;
@@ -66,67 +65,24 @@ public class APIBean implements API {
 				//TODO register in user
 				//create
 				retour = new FluxRSS(rssUrl);
+				em.persist(retour);
 			}
 			else {
-				//TODO register in user
-				//updtate existong articles ?
-				//méthode de maj et retour tout
-				return (FluxRSS) fluxRssList.get(0);
+				retour = (FluxRSS) fluxRssList.get(0);
+				retour.MAJArticles();
 			}
-			
-//			for(ArticleBean article : generateArticlesFromRssFeed(rss)) {
-//				Query q = em.createQuery("from ArticleBean a where a.id= :id");
-//				q.setParameter("id", article.getId());
-//				List<ArticleBean> articles = q.getResultList();
-//				
-//				//Max 1 article
-//				if(articles.size()==0) {
-//					em.persist(article);
-//					retour.
-//				}
-//				else {
-//					if(articles.get(0).getDate().getTime()<article.getDate().getTime()) em.persist(article);
-//				}
-//				
-//			}
-		}		
-		return retour;
-	}
 
-	private List<Article> generateArticlesFromRssFeed(String rss) {
-		URL source;
-//		try {
-//			source = new URL(rss);
-//		} catch (MalformedURLException e) {
-//			return null;
-//		}
-//		
-		List<Article> returnList = new ArrayList<Article>();
-//		
-//		SyndFeedInput input = new SyndFeedInput();
-//		SyndFeed feed;
-//		try {
-//			feed = input.build(new XmlReader(source));
-//		} catch (Exception e) {
-//			return null;
-//		}
-//
-////		System.out.println("Feed Title: " + feed.getAuthor());
-//
-//		for (Iterator<?> i = feed.getEntries().iterator(); i.hasNext();) {
-//			SyndEntry entry = (SyndEntry) i.next();
-//			returnList.add(new Article(entry));
-////			System.out.println(entry.getTitle());
-////			System.out.println("---"+entry.getForeignMarkup().hashCode());
-//		}
-		return returnList;
+			user.addFlux(retour);
+		}
+//		return retour;
+		return new FluxRSSClient(retour);
 	}
 
 	@Override
 	public boolean delRSS(String token, String rss) {
 		User user = Tokens.getUserFromToken(token);
 		if(user!=null) {
-			List<FluxRSS> listeFlux = user.getFlux();
+			ArrayList<FluxRSS> listeFlux = user.getFlux();
 			
 			FluxRSS toDelete = null;
 			for(FluxRSS fRss : listeFlux) {
@@ -145,7 +101,7 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public List<Article> getNewArticles(String token, String rss) {
+	public List<ArticleClient> getNewArticles(String token, String rss) {
 		User user = Tokens.getUserFromToken(token);
 		if(user!=null) {
 			for(FluxRSS flux : user.getFlux()) {
@@ -157,7 +113,7 @@ public class APIBean implements API {
 						Query q = em.createQuery("from Reading r where r.article= :article AND r.user = :user");				
 						q.setParameter("article", article);
 						q.setParameter("user", user);
-						List<Article> articles = q.getResultList();
+						ArrayList<Article> articles = (ArrayList<Article>) q.getResultList();
 						if(articles.size()==0) {
 							//not read
 							articlesToReturn.add(article);
@@ -166,7 +122,12 @@ public class APIBean implements API {
 							em.persist(new Reading(user, article));
 						}
 					}
-					return articlesToReturn;
+					List<ArticleClient> ac = new ArrayList<ArticleClient>();
+					for(Article a: articlesToReturn){
+						ac.add(new ArticleClient(a));
+					}
+					return ac;
+//					return articlesToReturn;
 				}
 			}
 		}
@@ -174,11 +135,16 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public List<FluxRSS> getRSS(String token, String catName) {
+	public List<FluxRSSClient> getRSS(String token, String catName) {
 		User user = Tokens.getUserFromToken(token);
 		if(user!=null) {
 			if(catName==null) {
-				return user.getFlux();
+				List<FluxRSSClient> ac = new ArrayList<FluxRSSClient>();
+				for(FluxRSS a: user.getFlux()){
+					ac.add(new FluxRSSClient(a));
+				}
+				return ac;
+//				return user.getFlux();
 			}
 		}
 		return null;

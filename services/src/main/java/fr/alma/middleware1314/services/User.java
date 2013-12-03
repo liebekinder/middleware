@@ -2,7 +2,6 @@ package fr.alma.middleware1314.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -18,7 +17,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 8690045689335999761L;
 	private String mail;
 	private String mdp;// IMPOSSIBLE IN PRODUCTION!!!
-	private List<FluxRSS> flux = new ArrayList<FluxRSS>();
+	private ArrayList<FluxRSS> flux = new ArrayList<FluxRSS>();
 
 	public User(String mail, String mdp) {
 		super();
@@ -49,11 +48,10 @@ public class User implements Serializable {
 	}
 
 	@Basic
-	@OneToMany
-	public List<FluxRSS> getFlux() {
+	public ArrayList<FluxRSS> getFlux() {
 		return flux;
 	}
-	public void setFlux(List<FluxRSS> flux) {
+	public void setFlux(ArrayList<FluxRSS> flux) {
 		this.flux = flux;
 	}
 	

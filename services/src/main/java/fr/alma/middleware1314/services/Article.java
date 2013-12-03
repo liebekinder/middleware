@@ -2,7 +2,6 @@ package fr.alma.middleware1314.services;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -10,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 
 @Entity
@@ -101,10 +99,6 @@ public class Article implements Serializable, Comparable<Article>{
 
 	public boolean equals(Article a){
 		return this.id.equals(a.id);
-	}
-	
-	
-	
-	
+	}	
 	
 }
