@@ -45,7 +45,7 @@ public class APIBean implements API {
 		
 		//In theory we got 1 user
 		User user = (User) users.get(0);
-		if(user.getMdp().equals(mdp)) return "ERR,1,Wrong password";
+		if(!user.getMdp().equals(mdp)) return "ERR,1,Wrong password "+user.getMail()+" "+user.getMdp();
 		
 		return Tokens.requestNewToken(user);
 	}

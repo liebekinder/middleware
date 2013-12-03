@@ -68,11 +68,12 @@ public class HelloEjbTest {
 		for(String url: fluxTemp){
 			System.out.println(url);
 		}
-		String pass = scan.next();
-		if(pass == null || pass.isEmpty()) return;
+		int pass = scan.nextInt();
+		if(pass <0 || pass >1) return;
 		if(token == null || token.isEmpty()) return;
 		
-		FluxRSS monFlux = middleware.addRSS(token, pass);
+		
+		FluxRSS monFlux = middleware.addRSS(token, fluxTemp.get(pass));
 		System.out.println(monFlux.getTitle());
 		
 	}
@@ -87,6 +88,8 @@ public class HelloEjbTest {
 		if(pass == null || pass.isEmpty()) return;
 		
 		token = middleware.login(nom, pass);
+		
+		System.out.println("@"+nom+"@"+pass+"@");
 		System.err.println(token);
 	}
 
@@ -99,7 +102,8 @@ public class HelloEjbTest {
 		String pass = scan.next();
 		if(pass == null || pass.isEmpty()) return;
 		
-		System.err.println(middleware.registerUser(nom, pass));		
+		System.err.println(middleware.registerUser(nom, pass));
+		System.out.println("@"+nom+"@"+pass+"@");
 	}
 
 }
