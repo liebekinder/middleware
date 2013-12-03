@@ -39,6 +39,10 @@ public class Tokens {
 	}
 
 	public static User getUserFromToken(String token) {
+		System.out.println(token);
+		for(String t:correlation.keySet()){
+			System.out.println(t);
+		}
 		if(correlation.containsKey(token)) {
 			timeRemaining.put(token, new Date().getTime());
 			return correlation.get(token);

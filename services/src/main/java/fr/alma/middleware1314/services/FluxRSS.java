@@ -41,6 +41,16 @@ public class FluxRSS implements Serializable {
 	
 	public FluxRSS(String rssUrl) {
 		super();
+		//proxy management
+        String proxyHost = "cache.etu.univ-nantes.fr";
+        String proxyPort = "3128";
+
+        System.setProperty("proxySet", "true");
+        System.setProperty("http.proxyHost", proxyHost);
+        System.setProperty("http.proxyPort", proxyPort);
+		//end proxy management
+        
+        
 		URL source;
 		try {
 			source = new URL(rssUrl);
@@ -57,13 +67,13 @@ public class FluxRSS implements Serializable {
 			MAJArticles();
 
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			System.err.println("mauvaise url: "+rssUrl);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			System.err.println("argument invalide: "+rssUrl);
 		} catch (FeedException e) {
-			e.printStackTrace();
+			System.err.println("RSS corrompu: "+rssUrl);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("probleme IO: "+rssUrl);
 		}
 	}
 
