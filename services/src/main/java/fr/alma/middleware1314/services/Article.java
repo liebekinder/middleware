@@ -9,15 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
+import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 
-import fr.alma.middleware1314.api.Article;
-
 @Entity
-@Table(name = "ARTICLE")
-public class ArticleBean implements Serializable,Article, Comparable<ArticleBean>{
+public class Article implements Serializable, Comparable<Article>{
 
 	/**
 	 * 
@@ -27,19 +24,19 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 	private String nom;
 	private String author;
 	private Date date;
-	private List<?> contenu;
+	private String contenu;
 	
-	public ArticleBean() {
+	public Article() {
 		super();
 	}
 
 
-	public ArticleBean(SyndEntry entry) {
+	public Article(SyndEntry entry) {
 		super();
 		this.nom = entry.getTitle();
 		this.id = entry.getUri();
 		this.date = entry.getUpdatedDate();
-		this.contenu = entry.getContents();
+		this.contenu = entry.getContents().toString();
 		this.author = entry.getAuthor();
 		
 		
@@ -73,12 +70,12 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 	}
 
 	@Basic
-	public List<?> getContenu() {
+	public String getContenu() {
 		return contenu;
 	}
-	public void setContenu(List<?> contenu) {
+	public void setContenu(String contenu) {
 		this.contenu = contenu;
-	}
+	}	
 	
 	@Basic
 	public String getAuthor() {
@@ -90,7 +87,7 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 	
 
 	@Override
-	public int compareTo(ArticleBean a) {
+	public int compareTo(Article a) {
 		if(this.date.compareTo(a.date) <0){
 			return -1;
 		}
@@ -102,7 +99,7 @@ public class ArticleBean implements Serializable,Article, Comparable<ArticleBean
 	
 
 
-	public boolean equals(ArticleBean a){
+	public boolean equals(Article a){
 		return this.id.equals(a.id);
 	}
 	

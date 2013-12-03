@@ -20,12 +20,12 @@ public class Tokens {
 	 */
 	protected static final int checkTime = 60;
 
-	protected static Map<String,UserBean> correlation = new HashMap<String,UserBean>();
+	protected static Map<String,User> correlation = new HashMap<String,User>();
 	protected static Map<String,Long> timeRemaining = new HashMap<String,Long>();
 	private static TokenCleaner cleaner = new TokenCleaner();
 	
 	
-	public static String requestNewToken(UserBean user) {
+	public static String requestNewToken(User user) {
 		if(correlation.size()==0) launchCleaner();
 		UUID uuid = UUID.randomUUID();
 		String token = uuid.toString();
@@ -38,7 +38,7 @@ public class Tokens {
 		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(cleaner, 0, timeout, TimeUnit.SECONDS);
 	}
 
-	public static UserBean getUserFromToken(String token) {
+	public static User getUserFromToken(String token) {
 		if(correlation.containsKey(token)) {
 			timeRemaining.put(token, new Date().getTime());
 			return correlation.get(token);

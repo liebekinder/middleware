@@ -1,25 +1,36 @@
 package fr.alma.middleware1314.services;
 
+import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import fr.alma.middleware1314.api.Article;
-import fr.alma.middleware1314.api.User;
-
-@Entity
 /**
  * Only store what the user have read. Allow to give him what he hasn't already read
  * @author seb
  *
  */
-public class Reading {
+@Entity
+public class Reading implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 174642223984550851L;
 	private long id;
 	private User user;
 	private Article article;
 
+	public Reading(){
+		
+	}
+
+	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public long getId() {
 		return id;
 	}
@@ -28,6 +39,9 @@ public class Reading {
 		this.id = id;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.alma.middleware1314.services.Reading#getUser()
+	 */
 	@Basic
 	public User getUser() {
 		return user;
@@ -37,6 +51,9 @@ public class Reading {
 		this.user = user;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.alma.middleware1314.services.Reading#getArticle()
+	 */
 	@Basic
 	public Article getArticle() {
 		return article;

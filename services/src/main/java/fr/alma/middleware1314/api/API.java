@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import fr.alma.middleware1314.services.Article;
+import fr.alma.middleware1314.services.FluxRSS;
+
 @Remote
 public interface API {
 

@@ -30,7 +30,21 @@ public class HelloEjbTest {
         	System.out.println("(3) - ajout d'un flux");
         	System.out.println("(4) - vide");
         	System.out.println("(5) - vide");
-        	System.out.println("(1) - vide");
+        	System.out.println("(0) - quitter");
+        	
+        	switch(saisie){
+        	case 1:
+        		ajout(middleware);
+        		break;
+        	case 2:
+        		login();
+        		break;
+        	case 3:
+        		rss();
+        		break;
+        	default:
+        		break;
+        	}
         	
         	
         }
@@ -40,5 +54,26 @@ public class HelloEjbTest {
         
         System.out.println(result);
     }
+
+	private static void rss() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void login() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void ajout(API middleware) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("le nom");
+		String nom = scan.next();
+		if(nom == null || nom.isEmpty()) return;
+		System.out.println("le password");
+		String pass = scan.next();
+		if(pass == null || pass.isEmpty()) return;
+		System.err.println(middleware.registerUser(nom, pass));		
+	}
 
 }
