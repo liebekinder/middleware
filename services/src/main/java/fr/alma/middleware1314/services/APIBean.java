@@ -53,6 +53,7 @@ public class APIBean implements API {
 	@Override
 	public FluxRSS addRSS(String token, String rssUrl) {
 		User user = Tokens.getUserFromToken(token);
+		System.out.println(user.getMail());
 		FluxRSS retour = null;
 		if(user!=null)
 		{
@@ -88,10 +89,7 @@ public class APIBean implements API {
 //				}
 //				
 //			}
-		}
-		
-		
-		
+		}		
 		return retour;
 	}
 
