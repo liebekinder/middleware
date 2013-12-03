@@ -163,6 +163,9 @@ public class APIBean implements API {
 						if(articles.size()==0) {
 							//not read
 							articlesToReturn.add(article);
+							
+							//marked readed
+							em.persist(new Reading(user, article));
 						}
 					}
 					return articlesToReturn;

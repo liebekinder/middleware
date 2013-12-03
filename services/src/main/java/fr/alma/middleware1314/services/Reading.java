@@ -29,6 +29,12 @@ public class Reading implements Serializable {
 	}
 
 	
+	public Reading(User user, Article article) {
+		this.user = user;
+		this.article = article;
+	}
+
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public long getId() {
