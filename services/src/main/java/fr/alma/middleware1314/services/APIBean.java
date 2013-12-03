@@ -1,6 +1,5 @@
 package fr.alma.middleware1314.services;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,14 +13,12 @@ import javax.persistence.Query;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 import fr.alma.middleware1314.api.API;
 import fr.alma.middleware1314.api.Article;
 import fr.alma.middleware1314.api.FluxRSS;
-import fr.alma.middleware1314.api.User;
 
 @Stateless
 public class APIBean implements API {
@@ -71,13 +68,12 @@ public class APIBean implements API {
 			//requete sur les flux...
 			Query q = em.createQuery("from FluxRSSBean a where a.url= :url");
 			q.setParameter("url", rssUrl);
-			List<FluxRSSBean> fluxRssList = q.getResultList();
-			
-			
+			List<FluxRSSBean> fluxRssList = q.getResultList();			
 			
 			if(fluxRssList.size()==0) {
 				//TODO register in user
 				//create
+				FluxRSS newFlux = new FluxRSSBean();
 			}
 			else {
 				//TODO register in user
