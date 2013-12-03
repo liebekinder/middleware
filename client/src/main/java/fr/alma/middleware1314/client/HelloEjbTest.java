@@ -10,6 +10,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import fr.alma.middleware1314.api.API;
+import fr.alma.middleware1314.services.Article;
 import fr.alma.middleware1314.services.FluxRSS;
 
 /**
@@ -33,7 +34,7 @@ public class HelloEjbTest {
         	System.out.println("(1) - ajout d'un utilisateur");
         	System.out.println("(2) - login d'un utilisateur");
         	System.out.println("(3) - ajout d'un flux");
-        	System.out.println("(4) - vide");
+        	System.out.println("(4) - lecture flux non lus");
         	System.out.println("(5) - vide");
         	System.out.println("(0) - quitter");
         	saisie = scan.nextInt();
@@ -48,21 +49,47 @@ public class HelloEjbTest {
         	case 3:
         		rss(middleware);
         		break;
+        	case 4:
+        		readNoRead(middleware);
+        		break;
+        	case 5:
+        		recupereFlux(middleware);
+        		break;
         	default:
         		break;
         	}
         	
         	
         }
-        boolean result = middleware.registerUser("afza", "fe");
         //HelloRemote helloService = (HelloRemote) context.lookup("ejb:/reader-services-ejb-0.1-SNAPSHOT/HelloBean!fr.alma.middleware1314.services.sample.HelloRemote");
-        
-        
-        System.out.println(result);
     }
 
+	private static List<FluxRSS> recupereFlux(API middleware) {
+		return null;
+		
+		
+	}
+
+	private static void readNoRead(API middleware) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Quel flux recupérer?");
+		List<FluxRSS> flux = recupereFlux(middleware);
+		for(FluxRSS f: flux){
+			System.out.println(f.getTitle());
+		}
+		int pass = scan.nextInt();
+		if(pass <0 || pass >1) return;
+		if(token == null || token.isEmpty()) return;
+		
+
+		List<Article> articles = (List<Article>) middleware.getNewArticles(token, flux.get(pass).getUrl());
+		for(Article a:articles){
+			System.out.println(a.getNom());
+		}
+	}
+
 	private static void rss(API middleware) {
-		List<String> fluxTemp = new ArrayList<String>(Arrays.asList("http://carottescuites.canalblog.com/rss.xml", "http://linuxfr.org/news.atom"));
+		List<String> fluxTemp = new ArrayList<String>(Arrays.asList("http://boards.4chan.org/b/index.rss","http://carottescuites.canalblog.com/rss.xml", "http://linuxfr.org/news.atom"));
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Quel flux ajouter?");
 		for(String url: fluxTemp){
