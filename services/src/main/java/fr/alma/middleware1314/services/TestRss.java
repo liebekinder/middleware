@@ -14,7 +14,8 @@ import com.sun.syndication.io.XmlReader;
 public class TestRss {
 
 	public static void main(String[] args) throws Exception {
-		URL source = new URL("http://linuxfr.org/news.atom");
+//		URL source = new URL("http://linuxfr.org/news.atom");
+		URL source = new URL("http://boards.4chan.org/board/index.rss");
 		SyndFeedInput input = new SyndFeedInput();
 		SyndFeed feed = input.build(new XmlReader(source));
 		// System.out.println(feed);
