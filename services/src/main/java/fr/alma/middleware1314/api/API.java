@@ -97,7 +97,7 @@ public interface API {
 	 *            the RSS
 	 * @return the unread article list or null if RSS doesn't exist or token invalid.
 	 */
-	public List<Article> getNewArticles(String token, FluxRSS rss);
+	public List<Article> getNewArticles(String token, String rss);
 
 	/**
 	 * Get X latest RSS articles. These article are marked as read if not already.

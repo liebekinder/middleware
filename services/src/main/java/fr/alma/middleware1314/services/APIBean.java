@@ -147,8 +147,28 @@ public class APIBean implements API {
 	}
 
 	@Override
-	public List<Article> getNewArticles(String token, FluxRSS rss) {
-		// TODO Auto-generated method stub
+	public List<Article> getNewArticles(String token, String rss) {
+		User user = Tokens.getUserFromToken(token);
+		if(user!=null) {
+			for(FluxRSS flux : user.getFlux()) {
+				if(flux.getUrl().equals(rss)) {
+					//process : get new articles
+					List<Article> articlesToReturn = new ArrayList<Article>();
+					
+					for(Article article : flux.getArticles()) {
+						Query q = em.createQuery("from Reading r where r.article= :article AND r.user = :user");				
+						q.setParameter("article", article);
+						q.setParameter("user", user);
+						List<Article> articles = q.getResultList();
+						if(articles.size()==0) {
+							//not read
+							articlesToReturn.add(article);
+						}
+					}
+					return articlesToReturn;
+				}
+			}
+		}
 		return null;
 	}
 
