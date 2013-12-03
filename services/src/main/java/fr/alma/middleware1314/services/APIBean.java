@@ -20,7 +20,7 @@ public class APIBean implements API {
 	@Override
 	public boolean registerUser(String mail, String mdp) {
 		// already existing user?
-		Query q = em.createQuery("from UserBean u where u.mail= :mail");
+		Query q = em.createQuery("from User u where u.mail= :mail");
 		q.setParameter("mail", mail);
 		List<?> users = q.getResultList();
 		if (users.size() == 0) {
@@ -37,7 +37,7 @@ public class APIBean implements API {
 
 	@Override
 	public String login(String mail, String mdp) {
-		Query q = em.createQuery("from UserBean u where u.mail= :mail");
+		Query q = em.createQuery("from User u where u.mail= :mail");
 		q.setParameter("mail", mail);
 		List<?> users = q.getResultList();
 		
@@ -57,7 +57,7 @@ public class APIBean implements API {
 		if(user!=null)
 		{
 			//requete sur les flux...
-			Query q = em.createQuery("from FluxRSSBean a where a.url= :url");
+			Query q = em.createQuery("from FluxRSS a where a.url= :url");
 			q.setParameter("url", rssUrl);
 			List<?> fluxRssList = q.getResultList();			
 			
