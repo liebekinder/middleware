@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>reader-services</artifactId>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>Reader :: Services</name>
 
